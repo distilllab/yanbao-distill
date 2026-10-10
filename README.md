@@ -28,6 +28,45 @@ export YANBAO_LIBRARY="/path/to/your/pdf-library"
 
 流程自动走：检索定位 → 结构遍（出精读页清单）→ 精读遍（逐页出卡）→ **核验遍（对照原文打回不合格卡）** → 归档 → 复盘。
 
+## 一单完整示例 / Walkthrough
+
+```text
+输入  "跑一单研报，关键词：高频因子"
+
+第一步 选题  在 475 份 PDF 库中命中 3 份，1 份标 [DUP] 跳过，
+            锁定《高频因子的现实与幻想》(海通证券，30 页)，
+            输出精读页清单 8-12 页
+第二步 蒸馏  逐页精读 → 产出 1 张主卡 + 3 张专题卡（草稿）
+第三步 核验  对照原文逐卡核验：数字抄行 / 页码 / 费前费后口径 / 原话属实
+            ↓ 发现 1 处夏普比率页码标错 → 打回重写
+            （同一张卡累计打回 ≥2 次即停单报告，不许第三次盲改）
+第四步 归档  核验表 11/11 命中 → 卡片落库 → 档案目录登记 → 复盘一句话
+```
+
+产出的知识卡长这样（骨架）：
+
+```markdown
+# 高频因子衰减速度：alpha 半衰期不足一日
+**时效警示**：样本期 2016-2019 A 股；当时 T+1 环境、无程序化降频新规
+## 核心结论
+- 高频因子的预测力随持有期拉长快速衰减，日频调仓下 IC 衰减 60%+（源 p.12）
+## 可复用方法
+- 因子有效性必须分持仓期分层检验，全期平均 IC 会掩盖衰减（源 p.13）
+## 关键数据
+- 日频 IC 0.052 → 周频 0.021 → 月频 0.008（源 p.12 表 3）
+## 迁移注记
+- 可迁移至可转债 5 分钟库重测：同因子分频率切窗口验证；T+0 环境衰减斜率应更缓
+```
+
+核验表随单留档（这是"知识卡 vs AI 直接总结"的差别所在）：
+
+```text
+| 卡 | 项目 | 原文页 | 核验 |
+| 1 | IC 0.052 | p.12 表3 | ✓ |
+| 1 | 衰减 60%+ | p.12 换算 | ✓ |
+| 2 | 检验方法 | p.13 §4.2 | ✓ |  → 11/11 命中
+```
+
 ## 目录结构
 
 ```
@@ -76,6 +115,46 @@ git clone <repo> ~/.claude/skills/yanbao-distill
 export YANBAO_LIBRARY="/path/to/your/pdf-library"
 # Then tell your agent: "run a batch, keyword: high-frequency factors"
 ```
+
+## Philosophy
+
+- The four roles (topic-selection / distillation / **review** / archiving) map to four different kinds of attention. Review must be independent from distillation — self-checking is not review.
+- Agents don't need to remember everything; they need to know where to find it. Cards are indexed knowledge; source pages guarantee traceability.
+- The gotcha list is the moat. Every entry was paid for with a real failure. PRs welcome.
+
+## End-to-end walkthrough
+
+```text
+Input   "run a batch, keyword: high-frequency factors"
+
+Step 1  Select   3 hits in a 475-PDF library, 1 marked [DUP] and skipped;
+                 locks onto "The Reality and Illusion of High-Frequency Factors"
+                 (Haitong Securities, 30 pages); outputs an 8-12 page reading list
+Step 2  Distill  page-by-page close reading -> 1 master card + 3 topic cards (drafts)
+Step 3  Verify   four-axis check against the source PDF: numbers / page refs /
+                 metric basis / wording
+                 ↓ 1 Sharpe-ratio page reference wrong -> card sent back for rewrite
+                 (>=2 rejections on the same card halts the run for human review)
+Step 4  Archive  verification table 11/11 hits -> cards filed -> catalog updated -> one-line retrospective
+```
+
+What a knowledge card looks like:
+
+```markdown
+# High-frequency factor decay: alpha half-life under one day
+**Freshness warning**: sample 2016-2019 A-shares; T+1 regime, no programmatic-trading throttle
+## Core findings
+- Factor predictive power decays fast with holding period; daily-rebalance IC drops 60%+ (source p.12)
+## Reusable method
+- Factor validity must be tested per holding-period layer; full-period average IC masks decay (source p.13)
+## Key data
+- Daily IC 0.052 -> weekly 0.021 -> monthly 0.008 (source p.12 table 3)
+## Migration note
+- Re-test on a 5-minute convertible-bond library: same factor, frequency-split windows;
+  decay slope should flatten under T+0
+```
+
+The verification table ships with every run — this is the difference between a knowledge card and an AI summary.
 
 ## Philosophy
 
